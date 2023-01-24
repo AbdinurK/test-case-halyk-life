@@ -5,7 +5,7 @@ import { useToast } from 'vue-toast-notification'
 
 const $toast = useToast()
 const store = useDocumentsStore()
-const docs = ref(null) 
+const docs = ref<any>(null) 
 const documents = computed(() => {
     return store.list
 })
