@@ -12,6 +12,18 @@ const routes: Array<RouteRecordRaw> = [
         path: '/documents',
         name: 'Documents',
         component: LoginForm,
+    },
+    {
+        path: '/',
+        name: 'Documents',
+        component: LoginForm,
     }
 ]
 
+const router = createRouter({
+    routes,
+    history: createWebHistory()
+})
+
+
+export default router
