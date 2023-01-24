@@ -30,9 +30,10 @@
 
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { userStore } from '../store/user'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useToast } from 'vue-toast-notification'
+import router from '../plugins/router'
+import { userStore } from '../store/user'
 export default defineComponent({
     setup() {
         const user = userStore()
@@ -50,13 +51,19 @@ export default defineComponent({
                 login: login.value,
                 password: password.value
             }, () => {
-                this.$router.push('/documents');
+                router.push('/documents')
             }, (err) => {
                 $toast.error(err, {
                     position: 'top'
                 })
             })
         }
+
+        onMounted(() => {
+            if (user.isLoggedIn) {
+                router.push('/')
+            }
+        })
 
         return {
             login,

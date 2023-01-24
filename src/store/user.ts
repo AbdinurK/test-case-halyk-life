@@ -14,7 +14,7 @@ export const userStore = defineStore('user', {
     getters: {
         loggedIn(state) {
             return state.isLoggedIn
-        }
+        },
     },
     actions: {
         async login(data: LoginFromData, success: () => void, error: (error: any) => void) {
