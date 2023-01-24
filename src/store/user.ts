@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
-interface LoginFromData {
+
+interface LoginFormData {
     login: string
     password: string
 }
@@ -17,7 +18,7 @@ export const userStore = defineStore('user', {
         },
     },
     actions: {
-        async login(data: LoginFromData, success: () => void, error: (error: any) => void) {
+        async login(data: LoginFormData, success: () => void, error: (error: any) => void) {
             this.isLoading = true
             try {
                 const res  = await fetch(`${import.meta.env.VITE_HALYK_LIFE_TEST_ENDPOINT}/insis/identity/api/Account/login`, {
