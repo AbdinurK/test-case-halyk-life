@@ -30,20 +30,42 @@
 
 
 <script lang="ts">
-export default {
-    name: 'LoginForm',
-    data() {
-        return {
-            login: '',
-            password: '',
-        }
-    },
-    methods: {
-        async submit() {
+import { defineComponent, ref } from 'vue'
+import { userStore } from '../store/user'
+import { useToast } from 'vue-toast-notification'
+export default defineComponent({
+    setup() {
+        const user = userStore()
+        const $toast = useToast()
+        const login = ref('')
+        const password = ref('')
 
-        },
+        async function submit() {
+            if (!login.value || !password.value) {
+                return $toast.error('Заполните поля!', {
+                    position: 'top'
+                })
+            }
+            await user.login({
+                login: login.value,
+                password: password.value
+            }, () => {
+                this.$router.push('/documents');
+            }, (err) => {
+                $toast.error(err, {
+                    position: 'top'
+                })
+            })
+        }
+
+        return {
+            login,
+            password,
+            submit,
+            user,
+        }
     }
-}
+})
 </script>
 
 
@@ -90,6 +112,9 @@ export default {
                 outline: none;
                 &:hover {
                     border-color: green;
+                }
+                &::placeholder {
+                    color: #ccc;
                 }
             }
             &-submit {
