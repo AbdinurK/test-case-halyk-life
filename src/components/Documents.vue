@@ -5,7 +5,7 @@ import { useToast } from 'vue-toast-notification'
 
 const $toast = useToast()
 const store = useDocumentsStore()
-const docs = ref<File | null>();
+const docs = ref(null) 
 const documents = computed(() => {
     return store.list
 })
@@ -22,7 +22,11 @@ async function onFileChanged($event: Event) {
 }
 
 async function uploadFile() {
-    if (!docs.value) return
+    if (!docs.value) {
+        return $toast.error('Выберите файл!', {
+            position: 'top'
+        })
+    }
     const formData = new FormData()
     const document = {
         processInstanceId: "084d012d-4350-4513-9985-2bfe260aca6b",
@@ -39,12 +43,10 @@ async function uploadFile() {
         $toast.success('Успешно загружено!', {
             position: 'top'
         })
-        docs.value = null
     }, (res) => {
         $toast.error(res, {
             position: 'top'
         })
-        docs.value = null
     })
 }
 
