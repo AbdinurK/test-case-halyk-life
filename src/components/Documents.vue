@@ -1,16 +1,51 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
-import { documentsStore } from '../store/documents'
-import router from '../plugins/router'
+import { onMounted, computed, ref } from 'vue'
+import { useDocumentsStore } from '../store/documents'
+import { useToast } from 'vue-toast-notification'
 
-const store = documentsStore()
-
+const $toast = useToast()
+const store = useDocumentsStore()
+const docs = ref<File | null>();
 const documents = computed(() => {
     return store.list
 })
 
-function goToHome() {
-    router.push('/')
+const loading = computed(() => {
+    return store.isLoading
+})
+
+async function onFileChanged($event: Event) {
+    const target = $event.target as HTMLInputElement;
+    if (target && target.files) {
+        docs.value = target.files[0]
+    }
+}
+
+async function uploadFile() {
+    if (!docs.value) return
+    const formData = new FormData()
+    const document = {
+        processInstanceId: "084d012d-4350-4513-9985-2bfe260aca6b",
+        fileTypeCode: "7",
+        page: 3,
+        fileName: docs.value.name
+    }
+    const documents = [document]
+
+    formData.append('file', docs.value)
+    formData.append('fileData', JSON.stringify(documents))
+    
+    store.upload(formData, () => {
+        $toast.success('Успешно загружено!', {
+            position: 'top'
+        })
+        docs.value = null
+    }, (res) => {
+        $toast.error(res, {
+            position: 'top'
+        })
+        docs.value = null
+    })
 }
 
 onMounted(async () => {
@@ -25,15 +60,19 @@ onMounted(async () => {
     <h2>Список документов</h2>
 
     <div>
-        <button @click="goToHome">
-            На главную
+        <input
+            type="file"
+            @change="onFileChanged($event)"
+        />
+        <button @click="uploadFile">
+            Загрузить
         </button>
-        <input type="file" />
     </div>
 
     
 
     <ul class="list">
+        <p v-if="loading">Загрузка...</p>
         <li class="list__item" v-for="(item, idx) in documents">
             <h4>Наименование</h4>
             <p>

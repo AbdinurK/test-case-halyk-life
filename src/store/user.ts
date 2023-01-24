@@ -9,7 +9,6 @@ export const userStore = defineStore('user', {
     state: () => {
         return {
             isLoggedIn: !!localStorage.getItem('accessToken'),
-            isLoading: false,
         }
     },
     getters: {
@@ -19,7 +18,6 @@ export const userStore = defineStore('user', {
     },
     actions: {
         async login(data: LoginFormData, success: () => void, error: (error: any) => void) {
-            this.isLoading = true
             try {
                 const res  = await fetch(`${import.meta.env.VITE_HALYK_LIFE_TEST_ENDPOINT}/insis/identity/api/Account/login`, {
                     method: 'POST',
@@ -40,7 +38,6 @@ export const userStore = defineStore('user', {
             } catch (err) {
                 error(err)
             }
-            this.isLoading = false
         }
     }
 })

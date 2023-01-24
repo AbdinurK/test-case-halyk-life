@@ -1,9 +1,6 @@
 import { defineStore } from 'pinia'
 
 
-interface UploadFormData {
-    processInstanceId: string
-}
 type Item = {
     certificateDate: string
     fileId: string
@@ -20,10 +17,10 @@ type Item = {
     signed: string
 }
 type RootState = {
-    list: Item[]
+    list: Item[],
     isLoading: boolean
 };
-export const documentsStore = defineStore('documents', {
+export const useDocumentsStore = defineStore('documents', {
     state: () => {
         return {
             list: [],
@@ -36,7 +33,9 @@ export const documentsStore = defineStore('documents', {
         },
     },
     actions: {
-        async fetchDocuments(data: UploadFormData, success: () => void, error: (error: any) => void) {
+        async fetchDocuments(data: {
+            processInstanceId: string
+        }, success: () => void, error: (error: any) => void) {
             this.isLoading = true
             try {
                 const res = await fetch(`${import.meta.env.VITE_HALYK_LIFE_TEST_ENDPOINT}/insis/arm/api/File/List`, {
@@ -52,6 +51,30 @@ export const documentsStore = defineStore('documents', {
                 if (res.ok) {
                     this.list = response
                     success()
+                } else {
+                    error(response)
+                }
+            } catch (err) {
+                error(err)
+            }
+            this.isLoading = false
+        },
+        async upload(data: FormData, success: () => void, error: (error: any) => void) {
+            this.isLoading = true
+            try {
+                const res = await fetch(`${import.meta.env.VITE_HALYK_LIFE_TEST_ENDPOINT}/insis/arm/api/File/UploadFiles`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                        'Accept': 'application/json'
+                    },
+                    body: data
+                })
+                const response = await res.json()
+                if (res.ok) {
+                    await this.fetchDocuments({
+                        processInstanceId: "0370c1fd-3b3d-4974-a0cb-23e8ccc727cd"
+                    }, success, () => null)
                 } else {
                     error(response)
                 }
