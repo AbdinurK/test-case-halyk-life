@@ -1,8 +1,8 @@
 <template>
-    Documents
+    <Documents />
 </template>
 
 
-<script lang="ts">
-    
+<script setup lang="ts">
+import Documents from '../components/Documents.vue'
 </script>

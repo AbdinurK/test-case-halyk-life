@@ -1,0 +1,3 @@
+<template>
+    Halyk Life
+</template>

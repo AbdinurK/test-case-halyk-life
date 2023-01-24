@@ -20,6 +20,7 @@
 
                 <input 
                     type="submit"
+                    value="Вход в систему"
                     class="login-page__form-submit"
                 />
             </fieldset>
@@ -39,7 +40,7 @@ export default {
     },
     methods: {
         async submit() {
-            
+
         },
     }
 }
@@ -55,6 +56,16 @@ export default {
         margin-bottom: 200px;
         background-color: #f8f8f8;
         padding: 3rem;
+
+        fieldset {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            border: none;
+            width: 300px;
+        }
+
         &__logo {
             width: 130px;
             height: 46px;
@@ -68,6 +79,27 @@ export default {
         &__form {
             display: flex;
             flex-direction: column;
+            &-input {
+                padding: 10px;
+                border-top: none;
+                border-right: none;
+                border-left: none;
+                margin-bottom: 20px;
+                border-bottom-width: 1px;
+                border-bottom-color: #ccc;
+                outline: none;
+                &:hover {
+                    border-color: green;
+                }
+            }
+            &-submit {
+                padding: 5px 12px;
+                background-color: green;
+                border: none;
+                color: #fff;
+                cursor: pointer;
+                font-weight: bold;
+            }
         }
     }
 </style>

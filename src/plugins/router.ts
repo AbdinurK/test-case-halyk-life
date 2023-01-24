@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-const LoginForm = () => import('../components/LoginForm.vue')
+const LoginForm = () => import('../pages/auth.vue')
+const Documents = () => import('../pages/documents.vue')
+const Home = () => import('../pages/index.vue')
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -11,12 +13,12 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/documents',
         name: 'Documents',
-        component: LoginForm,
+        component: Documents,
     },
     {
         path: '/',
-        name: 'Documents',
-        component: LoginForm,
+        name: 'Home',
+        component: Home,
     }
 ]
 
