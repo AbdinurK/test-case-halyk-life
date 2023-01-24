@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const LoginForm = () => import('../pages/auth.vue')
 const Documents = () => import('../pages/documents.vue')
+const NotFound = () => import('../pages/index.vue')
 const Home = () => import('../pages/index.vue')
 
 
@@ -19,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/',
         name: 'Home',
         component: Home,
+    },
+    {
+        path: '*',
+        name: '404',
+        component: NotFound,
     }
 ]
 
