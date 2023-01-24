@@ -1,3 +1,40 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useToast } from 'vue-toast-notification'
+import router from '../plugins/router'
+import { userStore } from '../store/user'
+
+
+const user = userStore()
+const $toast = useToast()
+const login = ref('TESTVUE')
+const password = ref('qwerty')
+
+async function submit() {
+    if (!login.value || !password.value) {
+        return $toast.error('Заполните поля!', {
+            position: 'top'
+        })
+    }
+    await user.login({
+        login: login.value,
+        password: password.value
+    }, () => {
+        return router.push('/documents')
+    }, (err) => {
+        $toast.error(err, {
+            position: 'top'
+        })
+    })
+}
+
+onMounted(() => {
+    if (user.loggedIn) {
+        router.push('/')
+    }
+})
+</script>
+
 <template>
     <main class="login-page">
         <a href="https://www.halyklife.kz/" class="login-page__logo" target="_blank">
@@ -27,53 +64,6 @@
         </form>
     </main>
 </template>
-
-
-<script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import { useToast } from 'vue-toast-notification'
-import router from '../plugins/router'
-import { userStore } from '../store/user'
-export default defineComponent({
-    setup() {
-        const user = userStore()
-        const $toast = useToast()
-        const login = ref('')
-        const password = ref('')
-
-        async function submit() {
-            if (!login.value || !password.value) {
-                return $toast.error('Заполните поля!', {
-                    position: 'top'
-                })
-            }
-            await user.login({
-                login: login.value,
-                password: password.value
-            }, () => {
-                router.push('/documents')
-            }, (err) => {
-                $toast.error(err, {
-                    position: 'top'
-                })
-            })
-        }
-
-        onMounted(() => {
-            if (user.isLoggedIn) {
-                router.push('/')
-            }
-        })
-
-        return {
-            login,
-            password,
-            submit,
-            user,
-        }
-    }
-})
-</script>
 
 
 <style lang="scss" scoped>
