@@ -7,8 +7,8 @@ import { userStore } from '../store/user'
 
 const user = userStore()
 const $toast = useToast()
-const login = ref('TESTVUE')
-const password = ref('qwerty')
+const login = ref('')
+const password = ref('')
 
 async function submit() {
     if (!login.value || !password.value) {
