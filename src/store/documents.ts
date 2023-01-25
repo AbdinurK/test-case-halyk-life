@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import axios from '../plugins/axios'
 
 
 type Item = {
@@ -38,21 +39,12 @@ export const useDocumentsStore = defineStore('documents', {
         }, success: () => void, error: (error: any) => void) {
             this.isLoading = true
             try {
-                const res = await fetch(`${import.meta.env.VITE_HALYK_LIFE_TEST_ENDPOINT}/insis/arm/api/File/List`, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                    },
-                })
-                const response = await res.json()
-                if (res.ok) {
-                    this.list = response
+                const res = await axios.post('/insis/arm/api/File/List', data)
+                if (res.data) {
+                    this.list = res.data
                     success()
                 } else {
-                    error(response)
+                    error('Возникла ошибка!')
                 }
             } catch (err) {
                 error(err)
@@ -60,28 +52,18 @@ export const useDocumentsStore = defineStore('documents', {
             this.isLoading = false
         },
         async upload(data: FormData, success: () => void, error: (error: any) => void) {
-            this.isLoading = true
             try {
-                const res = await fetch(`${import.meta.env.VITE_HALYK_LIFE_TEST_ENDPOINT}/insis/arm/api/File/UploadFiles`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-                        'Accept': 'application/json'
-                    },
-                    body: data
-                })
-                const response = await res.json()
-                if (res.ok) {
+                const res = await axios.post('/insis/arm/api/File/UploadFiles', data)
+                if (res.data) {
                     await this.fetchDocuments({
                         processInstanceId: "0370c1fd-3b3d-4974-a0cb-23e8ccc727cd"
-                    }, success, () => null)
+                    }, success, error)
                 } else {
-                    error(response)
+                    error(res.data)
                 }
             } catch (err) {
                 error(err)
             }
-            this.isLoading = false
         }
     }
 })

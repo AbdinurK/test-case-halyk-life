@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
         component: Home,
     },
     {
-        path: '*',
+        path: '/:pathMatch(.*)*',
         name: '404',
         component: NotFound,
     }

@@ -53,7 +53,11 @@ async function uploadFile() {
 onMounted(async () => {
     await store.fetchDocuments({
         processInstanceId: "0370c1fd-3b3d-4974-a0cb-23e8ccc727cd"
-    }, () => {}, () => {})
+    }, () => {}, (err: string) => {
+        $toast.error(err, {
+            position: 'top'
+        })
+    })
 })
 </script>
 
