@@ -12,13 +12,14 @@ function goToDocuments() {
 function logout() {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    return router.replace('/auth')
 }
 
-onMounted(() => {
-    if (!user.loggedIn) {
-        return router.push('/auth')
-    }
-})
+// onMounted(() => {
+//     if (!user.loggedIn) {
+//         return router.push('/auth')
+//     }
+// })
 
 </script>
 

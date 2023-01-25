@@ -20,7 +20,7 @@ async function submit() {
         login: login.value,
         password: password.value
     }, () => {
-        return router.push('/documents')
+        return router.push('/')
     }, (err) => {
         $toast.error(err, {
             position: 'top'
